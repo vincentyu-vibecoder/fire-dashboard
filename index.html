@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIRE Dashboard - Financial Independence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #a0a0b0;
+            font-weight: 300;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #b0b0c0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        input::placeholder {
+            color: #707080;
+        }
+
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .milestones-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .milestone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .milestone:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .milestone-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #00d4ff;
+        }
+
+        .milestone-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .milestone-target {
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        .milestone-years {
+            color: #ffa500;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+        }
+
+        .progress-percentage {
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            text-align: right;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .milestone-status {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #00d4ff;
+            font-weight: 500;
+        }
+
+        .milestone-status.achieved {
+            color: #00ff88;
+        }
+
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted rgba(0, 212, 255, 0.5);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #e0e0e0;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+        }
+
+        .tooltip-wrapper:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            color: #707080;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 FIRE Dashboard</h1>
+            <p class="subtitle">Financial Independence, Retire Early</p>
+        </header>
+
+        <div class="content">
+            <!-- Input Card -->
+            <div class="card">
+                <h2>📊 Your Numbers</h2>
+                
+                <div class="input-group">
+                    <label for="currentSavings">Current Savings ($)</label>
+                    <input type="number" id="currentSavings" placeholder="250000" value="250000">
+                </div>
+
+                <div class="input-group">
+                    <label for="monthlySavings">Monthly Contributions ($)</label>
+                    <input type="number" id="monthlySavings" placeholder="2000" value="2000">
+                </div>
+
+                <div class="input-group">
+                    <label for="annualIncome">Annual Income ($)</label>
+                    <input type="number" id="annualIncome" placeholder="120000" value="120000">
+                </div>
+
+                <div class="input-group">
+                    <label for="annualExpenses">Annual Expenses ($)</label>
+                    <input type="number" id="annualExpenses" placeholder="40000" value="40000">
+                </div>
+
+                <div class="input-group">
+                    <label for="annualReturn">Expected Annual Return (%)</label>
+                    <input type="number" id="annualReturn" placeholder="5" value="5" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label for="mortgageBalance">Mortgage Balance ($)</label>
+                    <input type="number" id="mortgageBalance" placeholder="300000" value="300000">
+                </div>
+
+                <button class="reset-button" onclick="resetForm()">Reset to Defaults</button>
+            </div>
+
+            <!-- Milestones Card -->
+            <div class="card">
+                <h2>🎯 Milestones</h2>
+                <div class="milestones-grid">
+                    <!-- Coast FIRE -->
+                    <div class="milestone">
+                        <div class="milestone-name">
+                            <span class="tooltip-wrapper">
+                                Coast FIRE
+                                <span class="tooltip-text">Stop contributing. Your current savings will grow to full FIRE through compound interest alone.</span>
+                            </span>
+                        </div>
+                        <div class="milestone-info">
+                            <span>Target:</span>
+                            <span class="milestone-target" id="coastTarget">—</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="coastProgress"></div>
+                        </div>
+                        <div class="progress-percentage" id="coastPercentage">0%</div>
+                        <div class="milestone-info">
+                            <span>Years:</span>
+                            <span class="milestone-years" id="coastYears">—</span>
+                        </div>
+                        <div class="milestone-status" id="coastStatus"></div>
+                    </div>
+
+                    <!-- Barista FIRE -->
+                    <div class="milestone">
+                        <div class="milestone-name">
+                            <span class="tooltip-wrapper">
+                                Barista FIRE
+                                <span class="tooltip-text">Work part-time or low-stress job. Your portfolio covers basic expenses, so you can work flexibly for supplemental income.</span>
+                            </span>
+                        </div>
+                        <div class="milestone-info">
+                            <span>Target:</span>
+                            <span class="milestone-target" id="baristaTarget">—</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="baristaProgress"></div>
+                        </div>
+                        <div class="progress-percentage" id="baristaPercentage">0%</div>
+                        <div class="milestone-info">
+                            <span>Years:</span>
+                            <span class="milestone-years" id="baristaYears">—</span>
+                        </div>
+                        <div class="milestone-status" id="baristaStatus"></div>
+                    </div>
+
+                    <!-- Full FIRE -->
+                    <div class="milestone">
+                        <div class="milestone-name">
+                            <span class="tooltip-wrapper">
+                                Full FIRE
+                                <span class="tooltip-text">Complete financial independence. Your portfolio generates enough to cover all expenses. You can retire fully!</span>
+                            </span>
+                        </div>
+                        <div class="milestone-info">
+                            <span>Target:</span>
+                            <span class="milestone-target" id="fullTarget">—</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="fullProgress"></div>
+                        </div>
+                        <div class="progress-percentage" id="fullPercentage">0%</div>
+                        <div class="milestone-info">
+                            <span>Years:</span>
+                            <span class="milestone-years" id="fullYears">—</span>
+                        </div>
+                        <div class="milestone-status" id="fullStatus"></div>
+                    </div>
+
+                    <!-- Mortgage Payoff -->
+                    <div class="milestone">
+                        <div class="milestone-name">
+                            <span class="tooltip-wrapper">
+                                Mortgage Payoff
+                                <span class="tooltip-text">Your home is completely paid off. Removes a major expense and increases your financial security.</span>
+                            </span>
+                        </div>
+                        <div class="milestone-info">
+                            <span>Target:</span>
+                            <span class="milestone-target" id="mortgageTarget">—</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="mortgageProgress"></div>
+                        </div>
+                        <div class="progress-percentage" id="mortgagePercentage">0%</div>
+                        <div class="milestone-info">
+                            <span>Years:</span>
+                            <span class="milestone-years" id="mortgageYears">—</span>
+                        </div>
+                        <div class="milestone-status" id="mortgageStatus"></div>
+                    </div>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-label">Current Progress</div>
+                        <div class="summary-value" id="currentAmount">$0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Savings Rate</div>
+                        <div class="summary-value" id="savingsRate">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Disclaimer: This is a simplified model for educational purposes. Consult a financial advisor for personalized guidance.</p>
+        </footer>
+    </div>
+
+    <script>
+        const inputs = {
+            currentSavings: document.getElementById('currentSavings'),
+            monthlySavings: document.getElementById('monthlySavings'),
+            annualIncome: document.getElementById('annualIncome'),
+            annualExpenses: document.getElementById('annualExpenses'),
+            annualReturn: document.getElementById('annualReturn'),
+            mortgageBalance: document.getElementById('mortgageBalance')
+        };
+
+        const outputs = {
+            coastTarget: document.getElementById('coastTarget'),
+            coastProgress: document.getElementById('coastProgress'),
+            coastPercentage: document.getElementById('coastPercentage'),
+            coastYears: document.getElementById('coastYears'),
+            coastStatus: document.getElementById('coastStatus'),
+
+            baristaTarget: document.getElementById('baristaTarget'),
+            baristaProgress: document.getElementById('baristaProgress'),
+            baristaPercentage: document.getElementById('baristaPercentage'),
+            baristaYears: document.getElementById('baristaYears'),
+            baristaStatus: document.getElementById('baristaStatus'),
+
+            fullTarget: document.getElementById('fullTarget'),
+            fullProgress: document.getElementById('fullProgress'),
+            fullPercentage: document.getElementById('fullPercentage'),
+            fullYears: document.getElementById('fullYears'),
+            fullStatus: document.getElementById('fullStatus'),
+
+            mortgageTarget: document.getElementById('mortgageTarget'),
+            mortgageProgress: document.getElementById('mortgageProgress'),
+            mortgagePercentage: document.getElementById('mortgagePercentage'),
+            mortgageYears: document.getElementById('mortgageYears'),
+            mortgageStatus: document.getElementById('mortgageStatus'),
+
+            currentAmount: document.getElementById('currentAmount'),
+            savingsRate: document.getElementById('savingsRate')
+        };
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateYearsToTarget(currentAmount, annualContribution, targetAmount, annualReturn) {
+            if (targetAmount <= currentAmount) {
+                return 0;
+            }
+
+            const monthlyContribution = annualContribution / 12;
+            const monthlyReturn = annualReturn / 100 / 12;
+            let balance = currentAmount;
+            let months = 0;
+            const maxMonths = 1000; // Safety limit (83+ years)
+
+            while (balance < targetAmount && months < maxMonths) {
+                balance = balance * (1 + monthlyReturn) + monthlyContribution;
+                months++;
+            }
+
+            return months / 12;
+        }
+
+        function updateDashboard() {
+            const current = parseFloat(inputs.currentSavings.value) || 0;
+            const monthly = parseFloat(inputs.monthlySavings.value) || 0;
+            const annual = parseFloat(inputs.annualIncome.value) || 0;
+            const expenses = parseFloat(inputs.annualExpenses.value) || 0;
+            const returnRate = parseFloat(inputs.annualReturn.value) || 5;
+            const mortgage = parseFloat(inputs.mortgageBalance.value) || 0;
+
+            // Calculate targets
+            const coastTarget = expenses / 2 * 25;
+            const baristaTarget = expenses * 0.5 * 25;
+            const fullTarget = expenses * 25;
+
+            // Calculate years to each milestone
+            const coastYears = calculateYearsToTarget(current, monthly * 12, coastTarget, returnRate);
+            const baristaYears = calculateYearsToTarget(current, monthly * 12, baristaTarget, returnRate);
+            const fullYears = calculateYearsToTarget(current, monthly * 12, fullTarget, returnRate);
+            const mortgageYears = calculateYearsToTarget(current, monthly * 12, mortgage, returnRate);
+
+            // Calculate progress percentages
+            const coastPercent = Math.min((current / coastTarget) * 100, 100);
+            const baristaPercent = Math.min((current / baristaTarget) * 100, 100);
+            const fullPercent = Math.min((current / fullTarget) * 100, 100);
+            const mortgagePercent = Math.min((current / mortgage) * 100, 100);
+
+            // Calculate savings rate
+            const annualSavings = monthly * 12;
+            const savingsRate = annual > 0 ? (annualSavings / annual) * 100 : 0;
+
+            // Update Coast FIRE
+            outputs.coastTarget.textContent = formatCurrency(coastTarget);
+            outputs.coastProgress.style.width = coastPercent + '%';
+            outputs.coastPercentage.textContent = coastPercent.toFixed(1) + '%';
+            outputs.coastYears.textContent = coastYears > 0 ? coastYears.toFixed(1) + ' yrs' : 'Done!';
+            outputs.coastStatus.textContent = current >= coastTarget ? '✓ Achieved!' : 'In Progress';
+            outputs.coastStatus.className = current >= coastTarget ? 'milestone-status achieved' : 'milestone-status';
+
+            // Update Barista FIRE
+            outputs.baristaTarget.textContent = formatCurrency(baristaTarget);
+            outputs.baristaProgress.style.width = baristaPercent + '%';
+            outputs.baristaPercentage.textContent = baristaPercent.toFixed(1) + '%';
+            outputs.baristaYears.textContent = baristaYears > 0 ? baristaYears.toFixed(1) + ' yrs' : 'Done!';
+            outputs.baristaStatus.textContent = current >= baristaTarget ? '✓ Achieved!' : 'In Progress';
+            outputs.baristaStatus.className = current >= baristaTarget ? 'milestone-status achieved' : 'milestone-status';
+
+            // Update Full FIRE
+            outputs.fullTarget.textContent = formatCurrency(fullTarget);
+            outputs.fullProgress.style.width = fullPercent + '%';
+            outputs.fullPercentage.textContent = fullPercent.toFixed(1) + '%';
+            outputs.fullYears.textContent = fullYears > 0 ? fullYears.toFixed(1) + ' yrs' : 'Done!';
+            outputs.fullStatus.textContent = current >= fullTarget ? '✓ Achieved!' : 'In Progress';
+            outputs.fullStatus.className = current >= fullTarget ? 'milestone-status achieved' : 'milestone-status';
+
+            // Update Mortgage Payoff
+            outputs.mortgageTarget.textContent = formatCurrency(mortgage);
+            outputs.mortgageProgress.style.width = mortgagePercent + '%';
+            outputs.mortgagePercentage.textContent = mortgagePercent.toFixed(1) + '%';
+            outputs.mortgageYears.textContent = mortgageYears > 0 ? mortgageYears.toFixed(1) + ' yrs' : 'Done!';
+            outputs.mortgageStatus.textContent = current >= mortgage ? '✓ Achieved!' : 'In Progress';
+            outputs.mortgageStatus.className = current >= mortgage ? 'milestone-status achieved' : 'milestone-status';
+
+            // Update summary
+            outputs.currentAmount.textContent = formatCurrency(current);
+            outputs.savingsRate.textContent = savingsRate.toFixed(1) + '%';
+        }
+
+        function resetForm() {
+            inputs.currentSavings.value = '250000';
+            inputs.monthlySavings.value = '2000';
+            inputs.annualIncome.value = '120000';
+            inputs.annualExpenses.value = '40000';
+            inputs.annualReturn.value = '5';
+            inputs.mortgageBalance.value = '300000';
+            updateDashboard();
+        }
+
+        // Add event listeners
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updateDashboard);
+        });
+
+        // Initial calculation
+        updateDashboard();
+    </script>
+</body>
+</html>
