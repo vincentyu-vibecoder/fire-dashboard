@@ -90,6 +90,54 @@
             letter-spacing: 0.5px;
         }
 
+        .label-tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted rgba(0, 212, 255, 0.5);
+        }
+
+        .label-tooltip-text {
+            visibility: hidden;
+            width: 240px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #e0e0e0;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -120px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            white-space: normal;
+            text-transform: none;
+            font-weight: 400;
+            letter-spacing: normal;
+        }
+
+        .label-tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+        }
+
+        .label-tooltip-wrapper:hover .label-tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
         input {
             width: 100%;
             padding: 12px 15px;
@@ -115,7 +163,7 @@
 
         .milestones-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -320,33 +368,23 @@
                 <h2>📊 Your Numbers</h2>
                 
                 <div class="input-group">
-                    <label for="currentSavings">Current Savings ($)</label>
+                    <label for="currentSavings"><span class="label-tooltip-wrapper">Current Savings ($)<span class="label-tooltip-text">Your total saved so far. This compounds over time to accelerate your FIRE goals.</span></span></label>
                     <input type="number" id="currentSavings" placeholder="250000" value="250000">
                 </div>
 
                 <div class="input-group">
-                    <label for="monthlySavings">Monthly Contributions ($)</label>
-                    <input type="number" id="monthlySavings" placeholder="2000" value="2000">
+                    <label for="annualSavings"><span class="label-tooltip-wrapper">Annual Savings Amount (After Taxes)<span class="label-tooltip-text">How much you save per year after taxes and all expenses. This is the amount that compounds toward your FIRE goals.</span></span></label>
+                    <input type="number" id="annualSavings" placeholder="24000" value="24000">
                 </div>
 
                 <div class="input-group">
-                    <label for="annualIncome">Annual Income ($)</label>
-                    <input type="number" id="annualIncome" placeholder="120000" value="120000">
-                </div>
-
-                <div class="input-group">
-                    <label for="annualExpenses">Annual Expenses ($)</label>
+                    <label for="annualExpenses"><span class="label-tooltip-wrapper">Annual Expenses (After Taxes)<span class="label-tooltip-text">Your total annual spending. Includes all living costs. FIRE targets are based on this number.</span></span></label>
                     <input type="number" id="annualExpenses" placeholder="40000" value="40000">
                 </div>
 
                 <div class="input-group">
-                    <label for="annualReturn">Expected Annual Return (%)</label>
+                    <label for="annualReturn"><span class="label-tooltip-wrapper">Expected Annual Return (%)<span class="label-tooltip-text">Average yearly return on investments. Stocks ~7-10%, bonds ~3-5%, conservative mix ~5%.</span></span></label>
                     <input type="number" id="annualReturn" placeholder="5" value="5" step="0.1">
-                </div>
-
-                <div class="input-group">
-                    <label for="mortgageBalance">Mortgage Balance ($)</label>
-                    <input type="number" id="mortgageBalance" placeholder="300000" value="300000">
                 </div>
 
                 <button class="reset-button" onclick="resetForm()">Reset to Defaults</button>
@@ -424,29 +462,6 @@
                         </div>
                         <div class="milestone-status" id="fullStatus"></div>
                     </div>
-
-                    <!-- Mortgage Payoff -->
-                    <div class="milestone">
-                        <div class="milestone-name">
-                            <span class="tooltip-wrapper">
-                                Mortgage Payoff
-                                <span class="tooltip-text">Your home is completely paid off. Removes a major expense and increases your financial security.</span>
-                            </span>
-                        </div>
-                        <div class="milestone-info">
-                            <span>Target:</span>
-                            <span class="milestone-target" id="mortgageTarget">—</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="mortgageProgress"></div>
-                        </div>
-                        <div class="progress-percentage" id="mortgagePercentage">0%</div>
-                        <div class="milestone-info">
-                            <span>Years:</span>
-                            <span class="milestone-years" id="mortgageYears">—</span>
-                        </div>
-                        <div class="milestone-status" id="mortgageStatus"></div>
-                    </div>
                 </div>
 
                 <div class="summary-grid">
@@ -455,8 +470,8 @@
                         <div class="summary-value" id="currentAmount">$0</div>
                     </div>
                     <div class="summary-card">
-                        <div class="summary-label">Savings Rate</div>
-                        <div class="summary-value" id="savingsRate">0%</div>
+                        <div class="summary-label">Savings Multiplier</div>
+                        <div class="summary-value" id="savingsRate">0x</div>
                     </div>
                 </div>
             </div>
@@ -470,11 +485,9 @@
     <script>
         const inputs = {
             currentSavings: document.getElementById('currentSavings'),
-            monthlySavings: document.getElementById('monthlySavings'),
-            annualIncome: document.getElementById('annualIncome'),
+            annualSavings: document.getElementById('annualSavings'),
             annualExpenses: document.getElementById('annualExpenses'),
-            annualReturn: document.getElementById('annualReturn'),
-            mortgageBalance: document.getElementById('mortgageBalance')
+            annualReturn: document.getElementById('annualReturn')
         };
 
         const outputs = {
@@ -495,12 +508,6 @@
             fullPercentage: document.getElementById('fullPercentage'),
             fullYears: document.getElementById('fullYears'),
             fullStatus: document.getElementById('fullStatus'),
-
-            mortgageTarget: document.getElementById('mortgageTarget'),
-            mortgageProgress: document.getElementById('mortgageProgress'),
-            mortgagePercentage: document.getElementById('mortgagePercentage'),
-            mortgageYears: document.getElementById('mortgageYears'),
-            mortgageStatus: document.getElementById('mortgageStatus'),
 
             currentAmount: document.getElementById('currentAmount'),
             savingsRate: document.getElementById('savingsRate')
@@ -536,11 +543,9 @@
 
         function updateDashboard() {
             const current = parseFloat(inputs.currentSavings.value) || 0;
-            const monthly = parseFloat(inputs.monthlySavings.value) || 0;
-            const annual = parseFloat(inputs.annualIncome.value) || 0;
+            const annual = parseFloat(inputs.annualSavings.value) || 0;
             const expenses = parseFloat(inputs.annualExpenses.value) || 0;
             const returnRate = parseFloat(inputs.annualReturn.value) || 5;
-            const mortgage = parseFloat(inputs.mortgageBalance.value) || 0;
 
             // Calculate targets
             const coastTarget = expenses / 2 * 25;
@@ -548,20 +553,17 @@
             const fullTarget = expenses * 25;
 
             // Calculate years to each milestone
-            const coastYears = calculateYearsToTarget(current, monthly * 12, coastTarget, returnRate);
-            const baristaYears = calculateYearsToTarget(current, monthly * 12, baristaTarget, returnRate);
-            const fullYears = calculateYearsToTarget(current, monthly * 12, fullTarget, returnRate);
-            const mortgageYears = calculateYearsToTarget(current, monthly * 12, mortgage, returnRate);
+            const coastYears = calculateYearsToTarget(current, annual, coastTarget, returnRate);
+            const baristaYears = calculateYearsToTarget(current, annual, baristaTarget, returnRate);
+            const fullYears = calculateYearsToTarget(current, annual, fullTarget, returnRate);
 
             // Calculate progress percentages
             const coastPercent = Math.min((current / coastTarget) * 100, 100);
             const baristaPercent = Math.min((current / baristaTarget) * 100, 100);
             const fullPercent = Math.min((current / fullTarget) * 100, 100);
-            const mortgagePercent = Math.min((current / mortgage) * 100, 100);
 
-            // Calculate savings rate
-            const annualSavings = monthly * 12;
-            const savingsRate = annual > 0 ? (annualSavings / annual) * 100 : 0;
+            // Calculate savings rate (savings as % of expenses for context)
+            const savingsContext = expenses > 0 ? (annual / expenses).toFixed(1) : 0;
 
             // Update Coast FIRE
             outputs.coastTarget.textContent = formatCurrency(coastTarget);
@@ -587,26 +589,16 @@
             outputs.fullStatus.textContent = current >= fullTarget ? '✓ Achieved!' : 'In Progress';
             outputs.fullStatus.className = current >= fullTarget ? 'milestone-status achieved' : 'milestone-status';
 
-            // Update Mortgage Payoff
-            outputs.mortgageTarget.textContent = formatCurrency(mortgage);
-            outputs.mortgageProgress.style.width = mortgagePercent + '%';
-            outputs.mortgagePercentage.textContent = mortgagePercent.toFixed(1) + '%';
-            outputs.mortgageYears.textContent = mortgageYears > 0 ? mortgageYears.toFixed(1) + ' yrs' : 'Done!';
-            outputs.mortgageStatus.textContent = current >= mortgage ? '✓ Achieved!' : 'In Progress';
-            outputs.mortgageStatus.className = current >= mortgage ? 'milestone-status achieved' : 'milestone-status';
-
             // Update summary
             outputs.currentAmount.textContent = formatCurrency(current);
-            outputs.savingsRate.textContent = savingsRate.toFixed(1) + '%';
+            outputs.savingsRate.textContent = savingsContext + 'x Annual Expenses';
         }
 
         function resetForm() {
             inputs.currentSavings.value = '250000';
-            inputs.monthlySavings.value = '2000';
-            inputs.annualIncome.value = '120000';
+            inputs.annualSavings.value = '24000';
             inputs.annualExpenses.value = '40000';
             inputs.annualReturn.value = '5';
-            inputs.mortgageBalance.value = '300000';
             updateDashboard();
         }
 
