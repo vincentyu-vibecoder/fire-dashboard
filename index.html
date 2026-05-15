@@ -429,7 +429,7 @@
                             <div class="milestone-name">
                                 <span class="tooltip-wrapper">
                                     Coast FIRE
-                                    <span class="tooltip-text">Stop contributing. Your current savings will grow to full FIRE through compound interest alone.</span>
+                                    <span class="tooltip-text"><strong>Target: 10x Annual Expenses</strong><br><br>Stop contributing and let compound interest do the work. At a 5% return, your portfolio grows enough to eventually cover your full expenses without additional contributions. You gain complete career freedom—work part-time, pursue passion projects, or take extended breaks. The multiplier is conservative, reflecting slower growth from reinvestment alone.</span>
                                 </span>
                             </div>
                             <div class="milestone-target" id="coastTarget">$0</div>
@@ -452,7 +452,7 @@
                             <div class="milestone-name">
                                 <span class="tooltip-wrapper">
                                     Barista FIRE
-                                    <span class="tooltip-text">Work part-time or low-stress job. Your portfolio covers basic expenses, so you can work flexibly for supplemental income.</span>
+                                    <span class="tooltip-text"><strong>Target: 20x Annual Expenses</strong><br><br>The "sweet spot"—your portfolio generates ~80% of your living expenses through a 4% withdrawal rate. You only need part-time work or a low-stress job to bridge the 20% gap. This offers the best of both worlds: financial security with intentional work. It's the practical middle ground between full coasting and complete independence.</span>
                                 </span>
                             </div>
                             <div class="milestone-target" id="baristaTarget">$0</div>
@@ -475,7 +475,7 @@
                             <div class="milestone-name">
                                 <span class="tooltip-wrapper">
                                     Full FIRE
-                                    <span class="tooltip-text">Complete financial independence. Your portfolio generates enough to cover all expenses. You can retire fully!</span>
+                                    <span class="tooltip-text"><strong>Target: 25x Annual Expenses</strong><br><br>Complete financial independence and freedom. At a 4% safe withdrawal rate, your portfolio sustainably generates 100% of your living expenses forever. This is the traditional FIRE target—fully retire, travel, pursue purpose projects, or simply enjoy life without working. The 25x multiplier is conservative, ensuring your wealth lasts 60+ years while inflation-adjusted.</span>
                                 </span>
                             </div>
                             <div class="milestone-target" id="fullTarget">$0</div>
@@ -577,8 +577,8 @@
             const returnRate = parseFloat(inputs.annualReturn.value) || 5;
 
             // Calculate targets
-            const coastTarget = expenses / 2 * 25;
-            const baristaTarget = expenses * 0.5 * 25;
+            const coastTarget = expenses * 10;
+            const baristaTarget = expenses * 20;
             const fullTarget = expenses * 25;
 
             // Calculate years to each milestone
